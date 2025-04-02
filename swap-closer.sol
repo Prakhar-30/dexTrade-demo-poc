@@ -21,7 +21,7 @@ contract DepositContract{
     // Mapping of swapId to Swap
     mapping(bytes32 => Swap) public swaps;
     // Events
-    event SwapAcknowledged(bytes32 indexed swapId, address indexed acceptor);
+    event SwapAcknowledged(bytes32 indexed swapId, address indexed acceptor, address inexed receiver);
     event TokensDeposited(bytes32 indexed swapId, address indexed acceptor, uint256 amount);
     event SwapCompleted(bytes32 indexed swapId, address indexed initiator, address indexed acceptor, address recipient, uint256 amount);
     event SwapCancelled(bytes32 indexed swapId, address indexed acceptor);
@@ -54,7 +54,7 @@ contract DepositContract{
             isDeposited: false,
             isCompleted: false
         });
-        emit SwapAcknowledged(_swapId, msg.sender);
+        emit SwapAcknowledged(_swapId, msg.sender, _receivingAddress);
     }
     // Deposit tokens for a swap after seeing TokensDeposited event on Chain1
     function depositTokens(bytes32 _swapId) external {
