@@ -57,7 +57,8 @@ contract RSC is AbstractReactive {
             }
         else if (log.topic_0 == TOKENS_DEPOSITED_TOPIC0) {
             bytes memory payload_callback = abi.encodeWithSignature(
-            "completeSwap(bytes32)",
+            "completeSwap(address,bytes32)",
+            address(0),
             log.topic_1,
             );
             emit Callback(

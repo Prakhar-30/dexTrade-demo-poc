@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 import "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import 'lib/reactive-lib/src/abstract-base/AbstractCallback.sol';
 
-contract DepositContract{
+contract DepositContract is AbstractCallback{
     // Swap structure
     struct Swap {
         bytes32 swapId;
@@ -25,6 +26,9 @@ contract DepositContract{
     event TokensDeposited(bytes32 indexed swapId, address indexed acceptor, uint256 amount);
     event SwapCompleted(bytes32 indexed swapId, address indexed initiator, address indexed acceptor, address recipient, uint256 amount);
     event SwapCancelled(bytes32 indexed swapId, address indexed acceptor);
+
+    constructor(address callback) AbstractCallback(callback) payable {}
+
     // user acknowledges the swap request
     function acknowledgeSwap(
         bytes32 _swapId,
@@ -70,7 +74,7 @@ contract DepositContract{
         emit TokensDeposited(_swapId, msg.sender, swap.destinationAmount);
     }
     //callback function for rsc to call in order to transfer funds to user's receiving address
-    function completeSwap(bytes32 _swapId) external {
+    function completeSwap(address /*spender*/,bytes32 _swapId) external {
         Swap storage swap = swaps[_swapId];
         require(swap.isAcknowledged, "Swap not acknowledged");
         require(swap.isDeposited, "Tokens not deposited");
