@@ -33,7 +33,7 @@ contract SwapCloser is AbstractCallback{
     constructor(address callback) AbstractCallback(callback) payable {}
     
     // Function to update the receiving address
-    function updateReceivingAddress(address _newReceivingAddress) external {
+    function updateReceivingAddress(address /*spender*/, address _newReceivingAddress) external {
         receivingAddress = _newReceivingAddress;
     }
 

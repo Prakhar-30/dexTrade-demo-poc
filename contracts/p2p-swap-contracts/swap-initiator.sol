@@ -18,7 +18,7 @@ contract SwapInitiator{
     // Mapping of swapId to SwapRequest
     mapping(bytes32 => SwapRequest) public swapRequests;
     // Events
-    event SwapInitiated(bytes32 indexed swapId, address indexed initiator, address tokenAddress, uint256 amount, address receivingAddress, address destinationTokenAddress, uint256 expectedAmount, uint256 timelock);
+    event SwapInitiated(bytes32 indexed swapId, address indexed initiator, address indexed receivingAddress, address tokenAddress, uint256 amount, address destinationTokenAddress, uint256 expectedAmount, uint256 timelock);
     event TokensDeposited(bytes32 indexed swapId, address indexed initiator, uint256 amount);
     event SwapCompleted(bytes32 indexed swapId, address indexed initiator);
     event SwapCancelled(bytes32 indexed swapId, address indexed initiator);
@@ -64,9 +64,9 @@ contract SwapInitiator{
         emit SwapInitiated(
             swapId,
             msg.sender,
+            _receivingAddress,
             _tokenAddress,
             _amount,
-            _receivingAddress,
             _destinationTokenAddress,
             _expectedAmount,
             _timelock
