@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 import "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import 'lib/reactive-lib/src/abstract-base/AbstractCallback.sol';
 
-contract DepositContract is AbstractCallback{
+contract SwapCloser is AbstractCallback{
     // Swap structure
     struct Swap {
         bytes32 swapId;
@@ -22,7 +22,7 @@ contract DepositContract is AbstractCallback{
     // Mapping of swapId to Swap
     mapping(bytes32 => Swap) public swaps;
     // Events
-    event SwapAcknowledged(bytes32 indexed swapId, address indexed acceptor, address inexed receiver);
+    event SwapAcknowledged(bytes32 indexed swapId, address indexed acceptor, address indexed receiver);
     event TokensDeposited(bytes32 indexed swapId, address indexed acceptor, uint256 amount);
     event SwapCompleted(bytes32 indexed swapId, address indexed initiator, address indexed acceptor, address recipient, uint256 amount);
     event SwapCancelled(bytes32 indexed swapId, address indexed acceptor);

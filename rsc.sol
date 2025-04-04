@@ -37,7 +37,7 @@ contract RSC is AbstractReactive {
             try service.subscribe(
                 ORIGIN_CHAIN_ID,
                 Origin_Contract,
-                SWAP_COMPLETED_TOPIC0,
+                SWAP_ACKNOWLEDGED_TOPIC0,
                 REACTIVE_IGNORE,
                 REACTIVE_IGNORE,
                 REACTIVE_IGNORE
@@ -55,11 +55,11 @@ contract RSC is AbstractReactive {
         if (log.topic_0 == SWAP_ACKNOWLEDGED_TOPIC0) {
                 reciever = address(uint160(log.topic_3));
             }
-        else if (log.topic_0 == TOKENS_DEPOSITED_TOPIC0) {
+        if (log.topic_0 == TOKENS_DEPOSITED_TOPIC0) {
             bytes memory payload_callback = abi.encodeWithSignature(
             "completeSwap(address,bytes32)",
             address(0),
-            log.topic_1,
+            log.topic_1
             );
             emit Callback(
             DESTINATION_CHAIN_ID,
