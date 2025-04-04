@@ -51,8 +51,7 @@ contract RSC is AbstractReactive {
     }
 
     function react(LogRecord calldata log) external override vmOnly {
-        require(log.chain_id == SEPOLIA_CHAIN_ID, "Wrong chain");
-        require(log._contract == swap_initiator_contract, "Wrong contract");
+
         if (log.topic_0 == SWAP_INITIATED_TOPIC0) {
                 bytes memory payload_callback = abi.encodeWithSignature(
                     "updateReceivingAddress(address,address)",
@@ -73,7 +72,7 @@ contract RSC is AbstractReactive {
                 log.topic_1
                 );
             emit Callback(
-            DESTINATION_CHAIN_ID,
+            KOPLI_CHAIN_ID,
             swap_closer_contract,
             CALLBACK_GAS_LIMIT,
             payload_callback
