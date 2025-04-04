@@ -4,6 +4,9 @@ import "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import 'lib/reactive-lib/src/abstract-base/AbstractCallback.sol';
 
 contract SwapCloser is AbstractCallback{
+    // Private variable for receiving address
+    address private receivingAddress;
+    
     // Swap structure
     struct Swap {
         bytes32 swapId;
@@ -28,6 +31,11 @@ contract SwapCloser is AbstractCallback{
     event SwapCancelled(bytes32 indexed swapId, address indexed acceptor);
 
     constructor(address callback) AbstractCallback(callback) payable {}
+    
+    // Function to update the receiving address
+    function updateReceivingAddress(address _newReceivingAddress) external {
+        receivingAddress = _newReceivingAddress;
+    }
 
     // user acknowledges the swap request
     function acknowledgeSwap(
@@ -37,7 +45,6 @@ contract SwapCloser is AbstractCallback{
         uint256 _sourceAmount,
         address _destinationTokenAddress,
         uint256 _destinationAmount,
-        address _receivingAddress,
         uint256 _timelock
     ) external {
         require(swaps[_swapId].swapId == bytes32(0), "Swap already acknowledged");
@@ -52,13 +59,13 @@ contract SwapCloser is AbstractCallback{
             sourceAmount: _sourceAmount,
             destinationTokenAddress: _destinationTokenAddress,
             destinationAmount: _destinationAmount,
-            receivingAddress: _receivingAddress,
+            receivingAddress: receivingAddress,
             timelock: _timelock,
             isAcknowledged: true,
             isDeposited: false,
             isCompleted: false
         });
-        emit SwapAcknowledged(_swapId, msg.sender, _receivingAddress);
+        emit SwapAcknowledged(_swapId, msg.sender, receivingAddress);
     }
     // Deposit tokens for a swap after seeing TokensDeposited event on Chain1
     function depositTokens(bytes32 _swapId) external {
